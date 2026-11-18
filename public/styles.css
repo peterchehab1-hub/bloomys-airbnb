@@ -222,39 +222,6 @@ body {
   transform: translateX(-50%) translateY(0);
 }
 
-/* Floating Instruction Toast */
-.interaction-pill {
-  position: fixed;
-  bottom: 24px;
-  left: 50%;
-  transform: translateX(-50%);
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  background: rgba(16, 21, 35, 0.88);
-  border: 1px solid rgba(229, 185, 88, 0.3);
-  padding: 10px 22px;
-  border-radius: 30px;
-  font-size: 0.82rem;
-  color: #e0e4f0;
-  backdrop-filter: blur(14px);
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5);
-  z-index: 20;
-}
-
-.pulse-dot {
-  width: 8px;
-  height: 8px;
-  background: var(--accent-gold);
-  border-radius: 50%;
-  box-shadow: 0 0 8px var(--accent-gold);
-  animation: pulse 1.8s infinite;
-}
-
-@keyframes pulse {
-  0%, 100% { opacity: 1; transform: scale(1); }
-  50% { opacity: 0.4; transform: scale(0.7); }
-}
 
 /* Modal Lightbox */
 .modal-overlay {
@@ -501,10 +468,5 @@ body {
   }
   .main-image-container {
     min-height: 250px;
-  }
-  .interaction-pill {
-    width: 90%;
-    font-size: 0.74rem;
-    padding: 8px 16px;
   }
 }
