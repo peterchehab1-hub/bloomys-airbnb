@@ -78,15 +78,13 @@ document.addEventListener('DOMContentLoaded', () => {
           item.el.style.opacity = '1';
         } else if (!allLightsOn) {
           item.el.classList.remove('lit');
-          item.el.style.opacity = '';
+          item.el.style.opacity = '0';
         }
       }
     });
   }
 
-  // 2. Wide Dynamic Cursor Lighting: Windows light up across the facade as cursor moves
-  const lightFadeTimeouts = new Map();
-
+  // 2. Real-Time Responsive Cursor Lighting: Lights up smoothly as cursor moves, turns off promptly as it moves away
   buildingWrapper.addEventListener('mousemove', (e) => {
     if (allLightsOn) return;
     const rect = buildingWrapper.getBoundingClientRect();
@@ -98,42 +96,28 @@ document.addEventListener('DOMContentLoaded', () => {
       const winCenterY = item.def.top + (item.def.height / 2);
       const distance = Math.hypot(mouseX - winCenterX, mouseY - winCenterY);
       
-      // Expansive radius (28% of facade)
-      if (distance < 28) {
-        const intensity = Math.max(0.35, 1 - (distance / 28));
+      // Proximity threshold: light up smoothly when near cursor
+      if (distance < 18) {
+        const intensity = Math.min(1, Math.max(0.2, 1 - (distance / 18)));
         item.el.style.opacity = intensity.toFixed(2);
         item.el.classList.add('lit');
-
-        // Clear any pending fade timeout
-        if (lightFadeTimeouts.has(item.el)) {
-          clearTimeout(lightFadeTimeouts.get(item.el));
-        }
-
-        // Keep illuminated warmly for 1.8 seconds after mouse passes
-        const timeout = setTimeout(() => {
-          if (!allLightsOn) {
-            item.el.style.opacity = '';
-            item.el.classList.remove('lit');
-          }
-        }, 1800);
-        lightFadeTimeouts.set(item.el, timeout);
+      } else {
+        item.el.style.opacity = '0';
+        item.el.classList.remove('lit');
       }
     });
   });
 
-  // 3. Ambient evening kindling: some windows gently illuminated on start
-  function ambientKindling() {
-    windowElements.forEach((item, index) => {
-      // Light up about half the windows in evening ambience
-      if (index % 2 === 0 || index % 3 === 0) {
-        item.el.style.opacity = '0.7';
-        item.el.classList.add('lit');
-      }
-    });
-  }
-  ambientKindling();
+  buildingWrapper.addEventListener('mouseleave', () => {
+    if (!allLightsOn) {
+      windowElements.forEach(item => {
+        item.el.style.opacity = '0';
+        item.el.classList.remove('lit');
+      });
+    }
+  });
 
-  // 4. Lightbox Gallery Logic
+  // 3. Lightbox Gallery Logic
   function openGallery(apt) {
     currentApt = apt;
     currentPhotoIdx = 0;
@@ -191,7 +175,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (e.key === 'ArrowRight') showPhoto(currentPhotoIdx + 1);
   });
 
-  // 5. Header Controls (Night, Twilight, All Lights)
+  // 4. Header Controls (Night, Twilight, All Lights)
   btnNight.addEventListener('click', () => {
     document.body.className = 'night-mode';
     btnNight.classList.add('active');
@@ -208,7 +192,7 @@ document.addEventListener('DOMContentLoaded', () => {
     allLightsOn = !allLightsOn;
     windowElements.forEach(item => {
       item.el.classList.toggle('lit', allLightsOn);
-      item.el.style.opacity = allLightsOn ? '1' : '';
+      item.el.style.opacity = allLightsOn ? '1' : '0';
     });
     btnAllLights.classList.toggle('active', allLightsOn);
     btnAllLights.textContent = allLightsOn ? '💡 Lights: ALL ON' : '💡 All Lights';
