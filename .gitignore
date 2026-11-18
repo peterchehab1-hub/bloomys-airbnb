@@ -1,0 +1,9 @@
+room_*.html
+tour_*.html
+ssr_*.html
+room*.html
+*.log
+*.tmp
+api_*.json
+test_*.html
+__pycache__/
