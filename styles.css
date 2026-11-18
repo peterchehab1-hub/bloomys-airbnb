@@ -1,8 +1,8 @@
 :root {
   --bg-gradient: radial-gradient(circle at 50% 20%, #151a2d 0%, #090c15 65%, #040508 100%);
   --ground-color: #0d0f17;
-  --glow-warm: rgba(255, 205, 95, 0.9);
-  --glow-ambient: rgba(255, 180, 50, 0.45);
+  --glow-warm: rgba(255, 205, 95, 0.95);
+  --glow-ambient: rgba(255, 180, 50, 0.65);
   --accent-gold: #e5b958;
   --accent-airbnb: #ff385c;
   --text-primary: #ffffff;
@@ -136,7 +136,7 @@ body {
   width: min(88vw, 560px);
   max-height: 82vh;
   aspect-ratio: 696 / 1210;
-  filter: drop-shadow(0 20px 40px rgba(0, 0, 0, 0.8));
+  filter: drop-shadow(0 20px 40px rgba(0, 0, 0, 0.85));
 }
 
 .facade-img {
@@ -155,91 +155,61 @@ body {
   box-shadow: 0 -15px 30px rgba(0, 0, 0, 0.9);
 }
 
-/* Windows Overlay */
+/* Windows Layer - Sits directly on top of building.png */
 .windows-layer {
   position: absolute;
   inset: 0;
   pointer-events: auto;
 }
 
+/* Precision Window Glass Illuminations */
 .building-window {
   position: absolute;
   cursor: pointer;
+  /* Screen blend lets the glass texture, curtains, and mullions from the underlying image show through! */
+  mix-blend-mode: screen;
+  background: radial-gradient(ellipse at 50% 50%, rgba(255, 245, 175, 1) 0%, rgba(255, 195, 75, 0.85) 50%, rgba(220, 120, 20, 0.5) 100%);
+  opacity: 0.15; /* Subtle ambient twilight reflection by default */
+  transition: opacity 0.4s cubic-bezier(0.2, 0, 0, 1), box-shadow 0.4s ease;
+  box-shadow: 0 0 16px var(--glow-ambient), inset 0 0 8px rgba(255, 240, 160, 0.7);
   border-radius: 2px;
-  transition: all 0.35s cubic-bezier(0.2, 0, 0, 1);
-  background: rgba(15, 20, 30, 0.25);
-  overflow: hidden;
 }
 
 .building-window.arch {
-  border-radius: 20px 20px 2px 2px;
+  border-radius: 40px 40px 2px 2px;
 }
 
 .building-window.door {
-  border-radius: 14px 14px 0 0;
+  border-radius: 50px 50px 0 0;
 }
 
-/* Window Glow effect */
-.building-window::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  opacity: 0;
-  background: radial-gradient(ellipse at 50% 45%, rgba(255, 240, 160, 0.95) 0%, rgba(255, 190, 70, 0.75) 50%, rgba(215, 125, 20, 0.4) 100%);
-  box-shadow: 0 0 16px var(--glow-ambient), inset 0 0 10px rgba(255, 220, 100, 0.6);
-  transition: opacity 0.3s ease, filter 0.3s ease;
-  pointer-events: none;
-}
-
-/* Interior silhouette lines */
-.building-window::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  opacity: 0;
-  background-image: 
-    linear-gradient(to right, rgba(0,0,0,0.4) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(0,0,0,0.4) 1px, transparent 1px);
-  background-size: 50% 33%;
-  pointer-events: none;
-  transition: opacity 0.3s ease;
-}
-
-/* Illuminated state */
-.building-window.lit::before,
-.building-window:hover::before {
-  opacity: 1;
-  filter: brightness(1.1);
-}
-
-.building-window.lit::after,
-.building-window:hover::after {
-  opacity: 0.75;
-}
-
+/* Fully Illuminated Window */
+.building-window.lit,
 .building-window:hover {
-  box-shadow: 0 0 25px var(--glow-warm);
+  opacity: 1 !important;
+  box-shadow: 0 0 25px var(--glow-warm), inset 0 0 12px rgba(255, 255, 200, 0.9);
   z-index: 10;
 }
 
 /* Floating apartment badge on hover */
 .window-tooltip {
   position: absolute;
-  bottom: calc(100% + 6px);
+  bottom: calc(100% + 8px);
   left: 50%;
   transform: translateX(-50%) translateY(4px);
   background: rgba(14, 18, 28, 0.95);
   border: 1px solid var(--accent-gold);
   color: #fff;
-  padding: 5px 10px;
-  border-radius: 6px;
-  font-size: 0.72rem;
+  padding: 6px 12px;
+  border-radius: 8px;
+  font-size: 0.75rem;
   white-space: nowrap;
   pointer-events: none;
   opacity: 0;
   transition: all 0.2s ease;
   z-index: 100;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.6);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.7);
+  mix-blend-mode: normal;
 }
 
 .window-tooltip strong {

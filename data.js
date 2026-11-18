@@ -17,24 +17,24 @@ const APARTMENTS = [
     ],
     "windows": [
       {
-        "left": 12.6,
-        "top": 80.7,
-        "width": 13.8,
-        "height": 14.5,
+        "left": 12.64,
+        "top": 80.83,
+        "width": 13.79,
+        "height": 13.72,
         "type": "arch"
       },
       {
-        "left": 41.7,
-        "top": 85.1,
-        "width": 16.7,
-        "height": 13.0,
+        "left": 42.39,
+        "top": 80.99,
+        "width": 15.23,
+        "height": 12.89,
         "type": "door"
       },
       {
-        "left": 73.3,
-        "top": 80.7,
-        "width": 13.8,
-        "height": 14.5,
+        "left": 73.28,
+        "top": 80.83,
+        "width": 13.79,
+        "height": 13.72,
         "type": "arch"
       }
     ]
@@ -57,28 +57,28 @@ const APARTMENTS = [
     ],
     "windows": [
       {
-        "left": 14.1,
-        "top": 66.3,
+        "left": 14.08,
+        "top": 71.07,
         "width": 11.5,
-        "height": 12.1
+        "height": 7.11
       },
       {
-        "left": 36.5,
-        "top": 66.3,
-        "width": 10.9,
-        "height": 12.1
+        "left": 36.64,
+        "top": 71.07,
+        "width": 11.06,
+        "height": 7.11
       },
       {
-        "left": 52.3,
-        "top": 66.3,
-        "width": 10.9,
-        "height": 12.1
+        "left": 52.16,
+        "top": 71.07,
+        "width": 11.06,
+        "height": 7.11
       },
       {
-        "left": 74.1,
-        "top": 66.3,
+        "left": 74.28,
+        "top": 71.07,
         "width": 11.5,
-        "height": 12.1
+        "height": 7.11
       }
     ]
   },
@@ -100,16 +100,16 @@ const APARTMENTS = [
     ],
     "windows": [
       {
-        "left": 14.1,
-        "top": 51.7,
+        "left": 14.08,
+        "top": 56.53,
         "width": 11.5,
-        "height": 12.1
+        "height": 7.11
       },
       {
-        "left": 36.5,
-        "top": 51.7,
-        "width": 10.9,
-        "height": 12.1
+        "left": 36.64,
+        "top": 56.53,
+        "width": 11.06,
+        "height": 7.11
       }
     ]
   },
@@ -124,16 +124,16 @@ const APARTMENTS = [
     ],
     "windows": [
       {
-        "left": 52.3,
-        "top": 51.7,
-        "width": 10.9,
-        "height": 12.1
+        "left": 52.16,
+        "top": 56.53,
+        "width": 11.06,
+        "height": 7.11
       },
       {
-        "left": 74.1,
-        "top": 51.7,
+        "left": 74.28,
+        "top": 56.53,
         "width": 11.5,
-        "height": 12.1
+        "height": 7.11
       }
     ]
   },
@@ -155,28 +155,28 @@ const APARTMENTS = [
     ],
     "windows": [
       {
-        "left": 14.1,
-        "top": 37.2,
+        "left": 14.08,
+        "top": 41.98,
         "width": 11.5,
-        "height": 12.1
+        "height": 7.11
       },
       {
-        "left": 36.5,
-        "top": 37.2,
-        "width": 10.9,
-        "height": 12.1
+        "left": 36.64,
+        "top": 41.98,
+        "width": 11.06,
+        "height": 7.11
       },
       {
-        "left": 52.3,
-        "top": 37.2,
-        "width": 10.9,
-        "height": 12.1
+        "left": 52.16,
+        "top": 41.98,
+        "width": 11.06,
+        "height": 7.11
       },
       {
-        "left": 74.1,
-        "top": 37.2,
+        "left": 74.28,
+        "top": 41.98,
         "width": 11.5,
-        "height": 12.1
+        "height": 7.11
       }
     ]
   },
@@ -198,16 +198,16 @@ const APARTMENTS = [
     ],
     "windows": [
       {
-        "left": 14.1,
-        "top": 22.5,
+        "left": 14.08,
+        "top": 27.27,
         "width": 11.5,
-        "height": 12.1
+        "height": 7.11
       },
       {
-        "left": 36.5,
-        "top": 22.5,
-        "width": 10.9,
-        "height": 12.1
+        "left": 36.64,
+        "top": 27.27,
+        "width": 11.06,
+        "height": 7.11
       }
     ]
   },
@@ -229,16 +229,16 @@ const APARTMENTS = [
     ],
     "windows": [
       {
-        "left": 52.3,
-        "top": 22.5,
-        "width": 10.9,
-        "height": 12.1
+        "left": 52.16,
+        "top": 27.27,
+        "width": 11.06,
+        "height": 7.11
       },
       {
-        "left": 74.1,
-        "top": 22.5,
+        "left": 74.28,
+        "top": 27.27,
         "width": 11.5,
-        "height": 12.1
+        "height": 7.11
       }
     ]
   },
@@ -260,31 +260,31 @@ const APARTMENTS = [
     ],
     "windows": [
       {
-        "left": 13.8,
-        "top": 11.7,
-        "width": 12.1,
-        "height": 10.2,
-        "type": "arch"
-      },
-      {
-        "left": 36.8,
-        "top": 11.7,
+        "left": 14.08,
+        "top": 12.07,
         "width": 11.5,
-        "height": 10.2,
+        "height": 9.26,
         "type": "arch"
       },
       {
-        "left": 51.4,
-        "top": 11.7,
+        "left": 36.64,
+        "top": 12.07,
+        "width": 11.06,
+        "height": 9.26,
+        "type": "arch"
+      },
+      {
+        "left": 52.16,
+        "top": 12.07,
+        "width": 11.06,
+        "height": 9.26,
+        "type": "arch"
+      },
+      {
+        "left": 74.28,
+        "top": 12.07,
         "width": 11.5,
-        "height": 10.2,
-        "type": "arch"
-      },
-      {
-        "left": 73.9,
-        "top": 11.7,
-        "width": 12.1,
-        "height": 10.2,
+        "height": 9.26,
         "type": "arch"
       }
     ]
