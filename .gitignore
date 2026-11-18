@@ -7,3 +7,7 @@ room*.html
 api_*.json
 test_*.html
 __pycache__/
+*.py
+apartments.json
+apartments_full.json
+bloomy_apartments.json

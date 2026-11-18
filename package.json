@@ -1,0 +1,8 @@
+{
+  "name": "bloomys-airbnb",
+  "version": "1.0.0",
+  "description": "Interactive building showcase for The Bloomy Residences",
+  "scripts": {
+    "build": "mkdir -p dist && cp index.html styles.css data.js app.js building.png dist/"
+  }
+}
