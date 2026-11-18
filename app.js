@@ -18,7 +18,12 @@ document.addEventListener('DOMContentLoaded', () => {
   let currentApt = null;
   let currentPhotoIdx = 0;
   let allLightsOn = false;
-  let lastTapTime = 0;
+
+  // Track double-tap and touch dragging on mobile
+  let lastTapAptId = null;
+  let lastTapTimestamp = 0;
+  let touchMoved = false;
+  let touchStartCoords = { x: 0, y: 0 };
 
   // 1. Render Windows onto Facade
   const windowElements = [];
@@ -38,26 +43,59 @@ document.addEventListener('DOMContentLoaded', () => {
         const tooltip = document.createElement('div');
         tooltip.className = 'window-tooltip';
         tooltip.innerHTML = `<strong>Floor ${apt.floor}</strong> &bull; ${apt.name}`;
+        tooltip.addEventListener('click', (e) => {
+          e.stopPropagation();
+          openGallery(apt);
+        });
+        tooltip.addEventListener('touchend', (e) => {
+          e.stopPropagation();
+          e.preventDefault();
+          openGallery(apt);
+        });
         win.appendChild(tooltip);
       }
 
-      // Double-click to open gallery
+      // Desktop Double-Click
       win.addEventListener('dblclick', (e) => {
         e.stopPropagation();
         openGallery(apt);
       });
 
-      // Mobile double-tap support
+      // Mobile Touch Handling: Single-tap lights up apartment; Double-tap opens gallery
       win.addEventListener('touchend', (e) => {
+        if (touchMoved) return; // User was dragging across building, ignore tap
         const now = Date.now();
-        if (now - lastTapTime < 350) {
+        const timeDiff = now - lastTapTimestamp;
+
+        if (lastTapAptId === apt.id && timeDiff < 450 && timeDiff > 40) {
+          // Confirmed double-tap!
           e.preventDefault();
+          e.stopPropagation();
           openGallery(apt);
+          lastTapAptId = null;
+          lastTapTimestamp = 0;
+        } else {
+          // Single tap: light up this apartment and show tooltip preview
+          lastTapAptId = apt.id;
+          lastTapTimestamp = now;
+          setApartmentLighting(apt.id, true);
+          // Show tooltip temporarily on mobile
+          const tip = win.querySelector('.window-tooltip');
+          if (tip) {
+            tip.style.opacity = '1';
+            tip.style.transform = 'translateX(-50%) translateY(0)';
+            setTimeout(() => {
+              if (!allLightsOn && modal.getAttribute('aria-hidden') === 'true') {
+                tip.style.opacity = '';
+                tip.style.transform = '';
+                setApartmentLighting(apt.id, false);
+              }
+            }, 2500);
+          }
         }
-        lastTapTime = now;
       });
 
-      // Hover highlights all windows of this apartment
+      // Desktop Hover
       win.addEventListener('mouseenter', () => {
         setApartmentLighting(apt.id, true);
       });
@@ -84,19 +122,18 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // 2. Real-Time Responsive Cursor Lighting: Lights up smoothly as cursor moves, turns off promptly as it moves away
-  buildingWrapper.addEventListener('mousemove', (e) => {
+  // 2. Real-Time Proximity Lighting: Handles both Mouse and Mobile Touch Dragging
+  function handlePointerLighting(clientX, clientY) {
     if (allLightsOn) return;
     const rect = buildingWrapper.getBoundingClientRect();
-    const mouseX = ((e.clientX - rect.left) / rect.width) * 100;
-    const mouseY = ((e.clientY - rect.top) / rect.height) * 100;
+    const x = ((clientX - rect.left) / rect.width) * 100;
+    const y = ((clientY - rect.top) / rect.height) * 100;
 
     windowElements.forEach(item => {
       const winCenterX = item.def.left + (item.def.width / 2);
       const winCenterY = item.def.top + (item.def.height / 2);
-      const distance = Math.hypot(mouseX - winCenterX, mouseY - winCenterY);
-      
-      // Proximity threshold: light up smoothly when near cursor
+      const distance = Math.hypot(x - winCenterX, y - winCenterY);
+
       if (distance < 18) {
         const intensity = Math.min(1, Math.max(0.2, 1 - (distance / 18)));
         item.el.style.opacity = intensity.toFixed(2);
@@ -106,15 +143,50 @@ document.addEventListener('DOMContentLoaded', () => {
         item.el.classList.remove('lit');
       }
     });
-  });
+  }
 
-  buildingWrapper.addEventListener('mouseleave', () => {
+  function resetLighting() {
     if (!allLightsOn) {
       windowElements.forEach(item => {
         item.el.style.opacity = '0';
         item.el.classList.remove('lit');
       });
     }
+  }
+
+  // Desktop mouse move
+  buildingWrapper.addEventListener('mousemove', (e) => {
+    handlePointerLighting(e.clientX, e.clientY);
+  });
+  buildingWrapper.addEventListener('mouseleave', resetLighting);
+
+  // Mobile touch drag (sliding finger across facade)
+  buildingWrapper.addEventListener('touchstart', (e) => {
+    if (e.touches.length > 0) {
+      touchMoved = false;
+      touchStartCoords = { x: e.touches[0].clientX, y: e.touches[0].clientY };
+    }
+  }, { passive: true });
+
+  buildingWrapper.addEventListener('touchmove', (e) => {
+    if (e.touches.length > 0) {
+      const dx = Math.abs(e.touches[0].clientX - touchStartCoords.x);
+      const dy = Math.abs(e.touches[0].clientY - touchStartCoords.y);
+      if (dx > 8 || dy > 8) {
+        touchMoved = true;
+      }
+      handlePointerLighting(e.touches[0].clientX, e.touches[0].clientY);
+    }
+  }, { passive: true });
+
+  buildingWrapper.addEventListener('touchend', () => {
+    if (touchMoved && !allLightsOn) {
+      setTimeout(resetLighting, 150);
+    }
+  });
+
+  buildingWrapper.addEventListener('touchcancel', () => {
+    if (!allLightsOn) resetLighting();
   });
 
   // 3. Lightbox Gallery Logic
@@ -167,6 +239,42 @@ document.addEventListener('DOMContentLoaded', () => {
   prevBtn.addEventListener('click', () => showPhoto(currentPhotoIdx - 1));
   nextBtn.addEventListener('click', () => showPhoto(currentPhotoIdx + 1));
 
+  // 4. Mobile Swipe Navigation in Gallery (Touch Swipe Left/Right)
+  const imageContainer = modal.querySelector('.main-image-container');
+  let touchStartX = 0;
+  let touchStartY = 0;
+  let touchEndX = 0;
+  let touchEndY = 0;
+
+  imageContainer.addEventListener('touchstart', (e) => {
+    if (e.changedTouches.length > 0) {
+      touchStartX = e.changedTouches[0].clientX;
+      touchStartY = e.changedTouches[0].clientY;
+    }
+  }, { passive: true });
+
+  imageContainer.addEventListener('touchend', (e) => {
+    if (e.changedTouches.length > 0) {
+      touchEndX = e.changedTouches[0].clientX;
+      touchEndY = e.changedTouches[0].clientY;
+      handleSwipe();
+    }
+  }, { passive: true });
+
+  function handleSwipe() {
+    const swipeDistanceX = touchEndX - touchStartX;
+    const swipeDistanceY = touchEndY - touchStartY;
+    if (Math.abs(swipeDistanceX) > 35 && Math.abs(swipeDistanceX) > Math.abs(swipeDistanceY)) {
+      if (swipeDistanceX < 0) {
+        // Swiped Left -> Next Photo
+        showPhoto(currentPhotoIdx + 1);
+      } else {
+        // Swiped Right -> Previous Photo
+        showPhoto(currentPhotoIdx - 1);
+      }
+    }
+  }
+
   // Keyboard navigation
   window.addEventListener('keydown', (e) => {
     if (!modal.classList.contains('open')) return;
@@ -175,7 +283,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (e.key === 'ArrowRight') showPhoto(currentPhotoIdx + 1);
   });
 
-  // 4. Header Controls (Night, Twilight, All Lights)
+  // 5. Header Controls (Night, Twilight, All Lights)
   btnNight.addEventListener('click', () => {
     document.body.className = 'night-mode';
     btnNight.classList.add('active');

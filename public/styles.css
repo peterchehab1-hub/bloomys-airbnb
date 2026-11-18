@@ -26,10 +26,12 @@ body {
   background: var(--bg-gradient);
   color: var(--text-primary);
   min-height: 100vh;
+  min-height: 100dvh;
   display: flex;
   flex-direction: column;
   overflow-x: hidden;
   transition: background 0.6s ease;
+  -webkit-font-smoothing: antialiased;
 }
 
 /* Stars background */
@@ -135,8 +137,11 @@ body {
   position: relative;
   width: min(88vw, 560px);
   max-height: 82vh;
+  max-height: 82dvh;
   aspect-ratio: 696 / 1210;
   filter: drop-shadow(0 20px 40px rgba(0, 0, 0, 0.85));
+  touch-action: manipulation;
+  -webkit-touch-callout: none;
 }
 
 .facade-img {
@@ -160,12 +165,15 @@ body {
   position: absolute;
   inset: 0;
   pointer-events: auto;
+  touch-action: manipulation;
 }
 
 /* Precision Window Glass Illuminations */
 .building-window {
   position: absolute;
   cursor: pointer;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
   /* Screen blend lets the glass texture, curtains, and mullions from the underlying image show through! */
   mix-blend-mode: screen;
   background: radial-gradient(ellipse at 50% 50%, rgba(255, 245, 175, 1) 0%, rgba(255, 195, 75, 0.85) 50%, rgba(220, 120, 20, 0.5) 100%);
@@ -456,17 +464,97 @@ body {
 /* Mobile Responsiveness */
 @media (max-width: 768px) {
   .luxury-header {
-    padding: 12px 18px;
+    padding: 10px 14px;
     flex-direction: column;
-    gap: 12px;
+    gap: 8px;
     text-align: center;
+  }
+  .brand-sub {
+    font-size: 0.62rem;
+    letter-spacing: 1.5px;
+  }
+  .brand-title {
+    font-size: 1.15rem;
+    letter-spacing: 1.8px;
+  }
+  .header-controls {
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px;
+  }
+  .superhost-badge {
+    padding: 4px 10px;
+    font-size: 0.72rem;
+  }
+  .mode-btn {
+    padding: 4px 10px;
+    font-size: 0.72rem;
+  }
+  .stage-container {
+    padding: 10px 10px 0;
+  }
+  .building-wrapper {
+    width: min(92vw, 380px);
+    max-height: calc(100dvh - 120px);
+  }
+  .street-ground {
+    height: 18px;
+  }
+  .modal-overlay {
+    padding: 10px;
   }
   .modal-dialog {
     grid-template-columns: 1fr;
-    max-height: 92vh;
+    max-height: 92dvh;
+    border-radius: 14px;
     overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  .modal-close {
+    top: 10px;
+    right: 10px;
+    width: 44px;
+    height: 44px;
+    font-size: 1.5rem;
   }
   .main-image-container {
-    min-height: 250px;
+    min-height: 240px;
+    max-height: 320px;
+    touch-action: pan-y pinch-zoom;
+  }
+  .nav-btn {
+    width: 44px;
+    height: 44px;
+    font-size: 1.1rem;
+  }
+  .prev-btn { left: 8px; }
+  .next-btn { right: 8px; }
+  .thumbnail-strip {
+    padding: 8px 10px;
+    gap: 6px;
+    -webkit-overflow-scrolling: touch;
+  }
+  .thumbnail-strip img {
+    width: 52px;
+    height: 38px;
+  }
+  .modal-sidebar {
+    padding: 20px 18px;
+  }
+  .apt-title {
+    font-size: 1.18rem;
+  }
+  .amenities-tags {
+    grid-template-columns: 1fr;
+    gap: 6px;
+  }
+  .amenities-tags span {
+    padding: 6px 10px;
+    font-size: 0.75rem;
+  }
+  .airbnb-btn {
+    padding: 12px;
+    font-size: 0.9rem;
   }
 }
+
