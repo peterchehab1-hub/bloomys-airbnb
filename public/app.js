@@ -7,6 +7,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const modalTitle = document.getElementById('modal-title');
   const modalFloor = document.getElementById('modal-floor');
   const modalLink = document.getElementById('modal-airbnb-link');
+  const modalWhatsappLink = document.getElementById('modal-whatsapp-link');
   const photoCounter = document.getElementById('photo-counter');
   const thumbnailStrip = document.getElementById('thumbnail-strip');
   const prevBtn = document.getElementById('prev-btn');
@@ -196,6 +197,9 @@ document.addEventListener('DOMContentLoaded', () => {
     modalTitle.textContent = apt.name;
     modalFloor.textContent = `Floor ${apt.floor}`;
     modalLink.href = apt.url;
+    if (modalWhatsappLink) {
+      modalWhatsappLink.href = `https://wa.me/9613080141?text=${encodeURIComponent(`Hi! I'm interested in booking ${apt.name} (Floor ${apt.floor}).`)}`;
+    }
 
     // Render thumbnails
     thumbnailStrip.innerHTML = '';
